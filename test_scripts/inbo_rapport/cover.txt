@@ -1,0 +1,11 @@
+Titel: Voorbeeldrapport met INBOmd
+Subtitel: Dit is de standaardversie
+Auteur(s): Thierry Onkelinx
+Contactpersoon: thierry.onkelinx@inbo.be
+Afbeelding voor cover: https://www.pexels.com/nl-nl/foto/hout-natuur-rood-creatief-4599227
+Embargo tot: 2099-03-01
+Aantal gedrukte examplaren: 10
+Motivatie: Vereist door opdrachtgever
+Aantal bladzijden: 123
+Logo klant: media/logo.jpg
+Logo samenwerking: media/logo.jpg

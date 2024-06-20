@@ -1,0 +1,110 @@
+--- 
+title: Voorbeeldrapport met INBOmd
+subtitle: Dit is de standaardversie
+author: 
+  - name:
+      given: Thierry
+      family: Onkelinx
+    email: thierry.onkelinx@inbo.be
+    orcid: 0000-0001-8804-4216
+    affiliation: Research Institute for Nature and Forest (INBO)
+    corresponding: true
+reviewer:
+  - name:
+      given: Floris
+      family: Vanderhaeghe
+    email: floris.vanderhaeghe@inbo.be
+    affiliation: Research Institute for Nature and Forest (INBO)
+    orcid: 0000-0002-6378-6229
+github-repo: inbo/inbomd-examples
+year: 2021
+cover_photo: https://www.pexels.com/nl-nl/foto/hout-natuur-rood-creatief-4599227
+cover_description: Detail van een blad. Foto door [Skyler Ewing](https://www.pexels.com/nl-nl/@skyler-ewing-266953?utm_content=attributionCopyText&utm_medium=referral&utm_source=pexels) via [Pexels](https://www.pexels.com/nl-nl/foto/hout-natuur-rood-creatief-4599227/?utm_content=attributionCopyText&utm_medium=referral&utm_source=pexels)
+cover: media/cover.pdf # link naar pdf met cover
+doi: 10.5281/zenodo.842223
+reportnr: 99999
+depotnr: D/2021/999999/999999
+ordernr: Het optionele nummer van de opdrachtgever
+funder: Research Institute for Nature and Forest (INBO) 
+rightsholder: Research Institute for Nature and Forest (INBO)
+community: inbo
+keywords: corporate identity; example
+publication_type: report
+embargo: 2099-03-01
+print:
+  copies: 10
+  motivation: Vereist door opdrachtgever
+  pages: 123
+client:
+  - INBO Brussel
+  - VAC Brussel ‐ Herman Teirlinck
+  - Havenlaan 88 bus 73
+  - 1000 Brussel
+  - https://www.vlaanderen.be/inbo
+client_logo: media/logo.jpg
+cooperation:
+  - INBO Brussel
+  - VAC Brussel ‐ Herman Teirlinck
+  - Havenlaan 88 bus 73
+  - 1000 Brussel
+  - https://www.vlaanderen.be/inbo
+cooperation_logo: media/logo.jpg
+style: INBO
+lang: nl
+lot: TRUE
+lof: TRUE
+
+site: bookdown::bookdown_site
+link-citations: TRUE
+bibliography: inbomd.bib
+
+output:
+  INBOmd::gitbook: default
+  INBOmd::pdf_report: default
+  bookdown::dont_run: default
+---
+
+```{r setup, include = FALSE}
+library(knitr)
+opts_chunk$set(
+  echo = TRUE, eval = TRUE, cache = FALSE, dpi = 300, fig.width = 150 / 25.4,
+  fig.height = 100 / 25.4, warning = TRUE, error = TRUE, message = TRUE
+)
+library(ggplot2)
+library(INBOtheme)
+if (interactive()) {
+  theme_set(
+    theme_inbo(base_family = "FlandersArtSans-Regular", base_size = 10)
+  )
+} else {
+  switch(
+    opts_knit$get("rmarkdown.pandoc.to"),
+    html = {
+      opts_chunk$set(dev = "png", dpi = 72)
+      theme_set(
+        theme_inbo(base_family = "FlandersArtSans-Regular", base_size = 12)
+      )
+    },
+    latex = {
+      opts_chunk$set(dev = "cairo_pdf", dpi = 300)
+      theme_set(
+        theme_inbo(base_family = "FlandersArtSans-Regular", base_size = 9)
+      )
+      update_geom_defaults("point", list(size = 1.5))
+    },
+    epub3 = {
+      opts_chunk$set(dev = "png", dpi = 300)
+      theme_set(
+        theme_inbo(base_family = "FlandersArtSans-Regular", base_size = 12)
+      )
+    }
+  )
+}
+library(lipsum)
+library(DT)
+set.seed(201901017)
+```
+
+# Dankwoord {-}
+
+`r paragraph(n = 5)`
