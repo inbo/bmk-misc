@@ -1,0 +1,191 @@
+# Lay-out tips voor pdf
+
+Bij de omzetting van Markdown naar pdf wordt gebruik gemaakt van [LaTeX](https://nl.wikipedia.org/wiki/LaTeX), software speciaal gemaakt voor het zetten van wetenschappelijke documenten. 
+Meestal werk dit zeer goed. 
+Soms gaat het de mist in. 
+Vooral in situatie wanneer het aandeel tekst klein is in vergelijking met andere elementen zoals figuren en tabellen. 
+Dit kan een indicatie zijn dat je te weinig tekst of te veel figuren hebt ;-)
+
+## Nieuwe pagina forceren
+
+Door `\pagebreak` te plaatsen forceer je de start van een nieuwe pagina op deze plaats. 
+Gebruik dit enkel wanneer je altijd een nieuwe pagina wilt starten en niet om tekst samen te houden.
+
+## Tekst samenhouden
+
+Standaard mag een nieuwe pagina starten voor een kop maar niet na een kop. 
+Op die manier wordt een kop samengehouden met de eerst volgende paragraaf. 
+Stel dat je een kop 2, een kop 3 en dan gewone tekst hebt. 
+De kop 3 en de eerste regels van de gewone tekst worden samengehouden. 
+Tussen kop 2 en kop 3 heb je twee conflicterende regels. 
+Enerzijds laat kop 2 geen nieuwe pagina toe na zichzelf, terwijl kop 3 een nieuw pagina toelaat voor zichzelf. 
+Uiteindelijk wint het toelaten van de nieuwe pagina omdat de pagina's dan optimaler gevuld worden. 
+Met als gevolg dat kop 2 onderaan de pagina staat en kop 3 bovenaan de nieuwe pagina.
+
+Als dergelijk situatie zich voordoet kan je het `\needspace` commando gebruiken.
+Dit commando meet hoeveel plaats er nog overblijft onderaan de pagina, gemeten op het punt waar je het commando plaatst. 
+Deze verticale ruimte wordt vergeleken met de waarde die je opgeeft in het commando. 
+Is die ruimte te klein, dan wordt een nieuwe pagina gestart. Hieronder vind je een concreet voorbeeld.
+
+```markdown
+Een paragraaf
+
+\needspace{50mm}
+
+## Een kop 2
+
+### Een kop 3
+
+De eerste paragraaf onder kop 3
+```
+
+\needspace{50mm} <!-- spell-check: ignore -->
+
+## Problemen met zwevende figuren en tabellen
+
+### Foutmelding: `too many unprocessed floats`
+
+Je document bevat een hoofdstuk met heel veel zwevende figuren of tabellen die nog niet gezet worden. 
+Dit treedt meestal op wanneer je meer dan 20 zwevende objecten hebt in een hoofdstuk. 
+De truck is een `\FloatBarrier` plaatsen. 
+Dit forceert dat eerst alle nog zwevende objecten gezet worden voor dat de rest van de tekst gezet wordt. 
+
+### Zwevende figuur of tabel wordt in de volgende sectie geplaatst
+
+LaTeX gaat zelf op zoek naar de optimale plaats om een zwevende figuur (of tabel) te plaatsen. 
+Ideaal is dat vlakbij het punt waar je de figuur in de tekst geplaatst hebt. 
+Wanneer je voldoende tekst hebt is dat meestal geen probleem. 
+Is je figuur nogal groot of plaats je verschillende figuren vlak bij elkaar, dan gaat LaTeX opzoek naar een geschikte plaats verder in het document. 
+Hierdoor kan het gebeuren dat de figuur in een volgende (sub)sectie terecht komt. 
+Als je een `\FloatBarrier` toevoegt voor de nieuwe sectie begint, dan dwing je LaTeX om eerst alle nog zwevende elementen te plaatsen voor dat de volgende sectie gezet wordt.
+
+### Automatische `\FloatBarrier`
+
+Alle zwevende elementen bij INBOmd blijven steeds binnen het hoofdstuk waarin ze gedefinieerd zijn. 
+Je kan dit strenger instellen door in de `yaml` de optie `floatbarrier: section` toe te voegen. 
+Dit is equivalent met het manueel plaatsen van een  `\FloatBarrier` voor elke kop van niveau 2 of hoger (`#` en `##`). 
+Andere opties zijn `floatbarrier: subsection` en `floatbarrier: subsubsection` die staan voor respectievelijk kop 3 (`#`, `##` en `###`) en kop 4 (`#`, `##`, `###` en `####`).
+
+## Woordafbreking
+
+In de html en epub versie is woordafbreking niet van toepassing.
+De woordafbreking van pdf documenten gebeurd automatisch en in functie van de taal^[Bijgevolg lukt de automatische woordafbreking niet bij een willekeurige tekenreeks. Denk hierbij aan de link naar een bestand op Google Drive zoals https://docs.google.com/presentation/d/10KkXEv4r3wWtdKvB6RFOPe809eMNldODaRqQxn-jeME/edit#slide=id.g321e330f74_1_997. Overweeg in dergelijke gevallen om het bestand via Zenodo te publiceren, wat een korte link oplevert https://doi.org/10.5281/zenodo.842223. Een andere mogelijkheid is de link achter een [woord](https://docs.google.com/presentation/d/10KkXEv4r3wWtdKvB6RFOPe809eMNldODaRqQxn-jeME/edit#slide=id.g321e330f74_1_997) te plaatsen].
+Kies daarom de stijl `Flanders` als de hoofdtaal van de document anders dan Nederlands is.
+Als je binnen een document een langer stuk in een ander taal dan de hoofdtaal hebt (bijv. Engelse samenvatting in een Nederlandstalig rapport), moet je aangeven dat dat stuk in de betrokken taal is.
+Je doet dit voor aan het begin `\b_taal_` en aan het einde `\e_taal_` te gebruiken waarbij je `_taal_` vervangt door de Engelse naam van de taal.
+Dus `\benglish` en `\eenglish` voor Engels, `\bdutch` en `\edutch` voor Nederlands en `\bfrench` en `\efrench` voor Frans.
+
+We lijnen de paragrafen zowel links als rechts uit.
+Om de tekst rechts uit te lijnen zal LaTeX de spaties breder of smaller maken.
+Om te vermijden dat de spaties te groot of te klein worden, kunnen we een woord afbreken.
+Als we het woord niet kunnen afbreken, is een alternatief om het woord toch op de dezelfde regel te houden en bijgevolg een langere regel te krijgen.
+LaTeX zal in dat laatste geval een afweging maken tussen te brede of te smalle spaties of een te lange regel.
+Regels met weinig spaties en een woord op het einde met weinig mogelijkheden qua woordafbreking maken het moeilijk om alle mooi rechts uit te lijnen zonder heel brede of heel smalle spaties te gebruiken.
+In dergelijke gevallen zal LaTeX ervoor kiezen om de regel langer te maken.
+
+Soms breekt LaTeX een woord niet af, of op de verkeerde plaats.
+Om dat te verhelpen kan je in de YAML onder de tag `hyphenation` een kommagescheiden lijst van woorden opnemen met de gewenste plaatsen waar de LaTeX het woord mag afbreken.
+Bijvoorbeeld `hyphenation: bio-lo-gische, waar-derings-kaart, wild-detectie-systeem` zal wilddetectiesysteem enkel afbreken als
+wild-detectiesysteem  <!-- spell-check: ignore -->
+of wilddetectie-systeem.
+
+```{block2, type = "alertblock"}
+Wanneer je een koppelteken in een woord gebruikt, dan zal LaTeX dat woord _enkel op dat punt_ afbreken.
+Woorden met vaste tekenbreedte (§\@ref(s:vaste-tekenbreedte)) zal LaTeX _nooit_ afbreken.
+
+**voorbeeld met koppelteken**  
+abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg multi-disciplinair.  
+abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg a multi-disciplinair.  
+abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg ab multi-disciplinair.  
+abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abc multi-disciplinair.  
+abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcd multi-disciplinair.  
+abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcde multi-disciplinair.  
+abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdef multi-disciplinair.  
+abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg multi-disciplinair.  
+abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg a multi-disciplinair.  
+abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg ab multi-disciplinair.  
+abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abc multi-disciplinair.  
+
+**voorbeeld zonder koppelteken**  
+abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg multidisciplinair.  
+abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg a multidisciplinair.  
+abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg ab multidisciplinair.  
+abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abc multidisciplinair.  
+abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcd multidisciplinair.  
+abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcde multidisciplinair.  
+abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdef multidisciplinair.  
+abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg multidisciplinair.  
+abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg a multidisciplinair.  
+abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg ab multidisciplinair.  
+abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abc multidisciplinair.  
+
+**voorbeeld met vaste tekenbreedte**  
+abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg `multidisciplinair.`  
+abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg a `multidisciplinair.`  
+abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg ab `multidisciplinair.`  
+abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abc `multidisciplinair.`  
+abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcd `multidisciplinair.`  
+abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcde `multidisciplinair.`  
+abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdef `multidisciplinair.`  
+abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg `multidisciplinair.`  
+abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg `multidisciplinair.`  
+abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg abcdefg `multidisciplinair.`
+```
+
+## Foutmelding bij het gebruik van `%` in bijschriften.
+
+`%` wordt gebruikt als commentaarteken in LaTeX. 
+In gewone tekst kan Markdown daar mee zonder problemen overweg, maar in bijschriften moet je een kleine omweg gebruiken. 
+Je moet deze truck ook gebruiken als je Markdown formattering wilt gebruiken in bijschriften.
+
+<!-- spell-check: ignore:start -->
+````markdown 
+Een gewone paragraaf.
+
+(ref:mijn-label) Een 100% **cool** `bijschrift`
+
+`r ''````{r mijn-label, fig.cap='(ref:mijn-label)'}
+plot(cars)  # jouw grafiek
+```
+````
+<!-- spell-check: ignore:end -->
+
+## Gebruik van markdown syntax of quotes in onderlijnde koppen {#s:onderlijnd}
+
+Het onderlijnen van koppen stuurt de regelafbreking in de war wanneer extra opmaak wordt gebruikt. 
+De beste oplossing zou zijn om de koppen niet te onderlijnen. 
+Onderlijnen wordt echter opgelegd in de generieke huisstijl van de Vlaamse overheid.
+
+Je kan het probleem op drie manieren omzeilen:
+
+1. Gebruik een titel die op 1 lijn past
+1. Gebruik enkel standaard tekst. Dus geen opmaak of quotes.
+In principe is cursieve tekst enkel toegestaan wanneer dat strikt noodzakelijk is.
+Bijvoorbeeld bij wetenschappelijke namen.
+1. Definieer regeleindes handmatig met het \\break commando. 
+Deze oplossing werkt overigens enkel wanneer je geen vette tekst gebruikt.
+Anderzijds hoort het al dan niet vet zijn bij de definitie van de huisstijl en hoor je dat als auteur niet te gebruiken in een kop.
+
+## Disserendi artem nullam habuit. 'Etiam fringilla faucibus augue.' `Nullam laoreet fermentum urna.` _Fusce dignissim facilisis tortor._  <!-- spell-check: ignore -->
+
+Voorbeeld van kop 2 met extra opmaak.
+
+#### Disserendi artem nullam habuit. 'Etiam fringilla faucibus augue.' `Nullam laoreet fermentum urna.` _Fusce dignissim facilisis tortor._  <!-- spell-check: ignore -->
+
+Voorbeeld van kop 4 met extra opmaak.
+
+## Disserendi artem nullam habuit. 'Etiam fringilla \break faucibus augue.' `Nullam laoreet fermentum urna.` \break _Fusce dignissim facilisis tortor._  <!-- spell-check: ignore -->
+
+Voorbeeld van kop 2 met extra opmaak en manuele plaatsing van regeleindes.
+
+#### Disserendi artem nullam habuit. 'Etiam fringilla faucibus augue.' \break `Nullam laoreet fermentum urna.` _Fusce dignissim facilisis tortor._  <!-- spell-check: ignore -->
+
+Voorbeeld van kop 4 met extra opmaak en manuele plaatsing van regeleindes.
+
+## _Fusce dignissim facilisis tortor._ <!-- spell-check: ignore -->
+
+Korte kop 2 in cursief.
+
+#### _Fusce dignissim facilisis tortor._  <!-- spell-check: ignore -->
+
+Korte kop 4 in cursief.
