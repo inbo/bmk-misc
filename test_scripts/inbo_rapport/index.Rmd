@@ -61,6 +61,7 @@ bibliography: inbomd.bib
 output:
   INBOmd::gitbook: default
   INBOmd::pdf_report: default
+  bookdown::word_document2: default
   bookdown::dont_run: default
 ---
 
