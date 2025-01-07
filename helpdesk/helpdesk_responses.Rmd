@@ -44,10 +44,13 @@ data <- responses_raw %>%
 ```
 
 ```{r}
-ggplot(data) +
-  geom_bar(aes(x = jaar)) +
-  labs(x = "", y = "Aantal BMK helpdesk aanvragen") +
-  theme_minimal()
+data %>%
+  count(jaar) %>%
+  ggplot(aes(x = jaar, y = n)) +
+    geom_bar(stat = "identity") +
+    geom_text(aes(label = n), vjust = -0.3, colour = "black") +
+    labs(x = "", y = "Aantal BMK helpdesk aanvragen") +
+    theme_minimal()
 ```
 
 # Analyse vorig jaar
@@ -60,7 +63,7 @@ ggplot(data_prev_year, aes(x = datum, y = cum_n)) +
   geom_line() +
   geom_point() +
   labs(x = "", y = "Cumulatief aantal BMK helpdesk aanvragen",
-         title = paste("Verloop", prev_year)) +
+         title = paste("Verloop aanvragen", prev_year)) +
   scale_x_date(date_breaks = "1 month", date_labels = "%b") +
     theme_minimal()
 ```
@@ -72,7 +75,7 @@ data_prev_year %>%
   ggplot() +
     geom_bar(aes(x = Onderwerp, y = n), stat = "identity", width = 0.5) +
     labs(x = "", y = "Aantal BMK helpdesk aanvragen",
-         title = paste("Onderwerp", prev_year)) +
+         title = paste("Onderwerp aanvragen", prev_year)) +
     scale_x_discrete(labels = scales::label_wrap(25)) +
     coord_flip() +
     theme_minimal()
@@ -86,7 +89,7 @@ data_prev_year %>%
   ggplot() +
     geom_bar(aes(x = Status, y = n), stat = "identity", width = 0.5) +
     labs(x = "", y = "Aantal BMK helpdesk aanvragen",
-         title = paste("Status", prev_year)) +
+         title = paste("Status aanvragen", prev_year)) +
     scale_x_discrete(labels = scales::label_wrap(20)) +
     coord_flip() +
     theme_minimal()
