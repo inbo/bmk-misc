@@ -1,6 +1,7 @@
 --- 
 title: Voorbeeldrapport met INBOmd
 subtitle: Dit is de standaardversie
+shorttitle: vbrapport-INBOmd
 author: 
   - name:
       given: Thierry
