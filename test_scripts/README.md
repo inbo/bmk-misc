@@ -9,6 +9,11 @@
 -   Knit the R Markdown document `test_script.Rmd`
     -   Does it run without issues?
 
+## Test Quarto document
+
+-   Render the Quarto document `test_script2.qmd`
+    -   Does it run without issues?
+
 ## Test `renv` project
 
 -   Open `renv_project.Rproj` in folder `renv_project`
