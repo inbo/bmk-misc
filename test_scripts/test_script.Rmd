@@ -109,4 +109,3 @@ We bekijken de resultaten.
 # Summarize model results
 summary(fit)
 ```
-
