@@ -1,0 +1,49 @@
+# Code
+
+```{r}
+#| label: libraries
+
+library(ggplot2)
+library(knitr)
+```
+
+We gebruiken de ingebouwde dataset `iris`.
+
+```{r}
+#| label: summary
+
+gemiddelde <- mean(iris$Sepal.Length)
+
+samenvatting <- data.frame(
+  Soort = unique(iris$Species),
+  Aantal = table(iris$Species)
+)
+```
+
+De gemiddelde kelkbladlengte bedraagt `r round(gemiddelde, 2)` cm.
+
+## Figuur
+
+@fig-sepal toont de relatie tussen kelkbladlengte en kelkbladbreedte.
+
+```{r}
+#| label: fig-sepal
+#| fig-cap: "Kelkbladlengte versus kelkbladbreedte."
+
+ggplot(
+  iris,
+  aes(Sepal.Length, Sepal.Width, colour = Species)
+) +
+  geom_point()
+```
+
+## Tabel
+
+@tbl-soorten geeft het aantal waarnemingen per soort.
+
+```{r}
+#| label: tbl-soorten
+#| tbl-cap: "Aantal waarnemingen per soort."
+
+kable(samenvatting)
+```
